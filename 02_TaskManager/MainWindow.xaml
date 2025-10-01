@@ -9,10 +9,10 @@
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button Click="Button_Click">Refresh</Button>
-            <Button >Kill</Button>
-            <Button >Show Info</Button>
-            <TextBox Name="nameProc" Width="200"></TextBox>
-            <Button >Ok</Button>
+            <Button Click="Kill_Click">Kill</Button>
+            <Button Click="ShowInfo_Click">Show Info</Button>
+            <TextBox Name="nameProc" Width="160" Margin="8,0"/>
+            <Button Click="Ok_Click">OK</Button>
         </ToolBar>
         <DataGrid Name="grid" AutoGenerateColumns="False" >
             <DataGrid.Columns>
