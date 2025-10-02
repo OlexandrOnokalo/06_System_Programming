@@ -5184,13 +5184,6 @@ System Programming
 
 
 
-
-
-
-
-
-
-
 	Новий юсінг
 using System.Diagnostics; - для роботи з процесами
 
@@ -5399,4 +5392,148 @@ Threads потоки
 	другорядні
 	
 Коли закривається основний поток, закривається всі дочірні другорядні
+
+	Приклад:
+	
+using System;
+using System.Threading;
+
+class Program
+{
+    static void DoWork()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Console.WriteLine($"Працює додатковий потік: {i}");
+            Thread.Sleep(500); // пауза 0.5 секунди
+        }
+    }
+
+    static void Main()
+    {
+        Thread t = new Thread(DoWork); // створюємо новий потік
+        t.Start(); // запускаємо його
+
+        for (int i = 0; i < 5; i++)
+        {
+            Console.WriteLine($"Працює головний потік: {i}");
+            Thread.Sleep(500);
+        }
+    }
+}
+
+		Що буде?
+Одночасно працюватимуть два потоки:
+Main (головний)
+DoWork (новий)
+В консолі будуть вперемішку виводитись повідомлення.
+
+	Основні методи Thread
+Start() – запускає потік.
+Sleep(ms) – зупиняє потік на кілька мілісекунд.
+IsAlive – показує, чи ще працює потік.
+Join() – чекає завершення потоку.
+
+	Коли ти викликаєш t.Join(); у Main, відбувається ось що:
+
+Головний потік (Main) зупиняє свою роботу й чекає, доки потік t завершить виконання.
+
+Потік t при цьому продовжує працювати.
+
+Тобто у момент виклику Join Main "заморожується", а t працює далі.
+
+
+class Program
+{
+    static void DoWork()
+    {
+        Console.WriteLine("Почався додатковий потік...");
+        Thread.Sleep(2000);
+        Console.WriteLine("Додатковий потік завершився");
+    }
+
+    static void Main()
+    {
+        Thread t = new Thread(DoWork);
+        t.Start();
+
+        Console.WriteLine("Головний потік чекає завершення t...");
+        t.Join(); // тут Main зупиняється і чекає
+        Console.WriteLine("Продовження головного потоку після Join");
+    }
+}
+
+
+	Thread without params
+	
+Метод, який запускається потоком, не приймає параметрів
+        
+		static void Method()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                Console.WriteLine($"\t\t\t{i} - Hello in thread");
+                Thread.Sleep(50);
+            }
+        }
+        static void Main(string[] args)
+        {
+			Thread t = new Thread(Method);
+
+	
+	Thread with params
+	
+Метод, який запускаєтсья потоком, приймає параметри
+
+        static void ThreadFunk(object? a)
+        {
+
+            string ID = (string)a;
+            for (int i = 0; i < 100; i++)
+            {
+                Console.WriteLine(ID + " " + i);
+                //Console.ReadKey();
+                Thread.Sleep(100);
+            }
+        }
+		
+        static void Main(string[] args)
+        {
+        
+		static void Main(string[] args)
+        {			
+			Thread t = new Thread(ThreadFunk);
+			T.Start("One");  
+			
+Тут уже поток приймає параметр, який передається методу
+
+	Thread in background
+	
+Thread t = new Thread(Method);
+t.Start("One"); 
+
+t.IsBackground = true; // default - false
+t.Start();
+
+t.Abort(); - thread forse quit  == kill
+
+========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
