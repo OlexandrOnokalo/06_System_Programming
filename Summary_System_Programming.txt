@@ -5538,6 +5538,112 @@ Interlocked.Increment(ref Counter.count);
 
 
 
+========================================================
+05_Tasks
+
+TPL - Task Parallel Library
+
+Task у C# — це об’єкт, який представляє асинхронну або паралельну операцію.
+Його можна сприймати як "завдання", яке виконується окремо від основного потоку програми.
+
+		Головні моменти про Task:
+
+Належить до простору імен System.Threading.Tasks.
+
+Дозволяє запускати код у фоновому потоці без ручного створення Thread.
+
+Може повертати результат (Task<T>) або бути безрезультатним (Task).
+
+Підтримує очікування завершення через await або Wait().
+
+Використовується для побудови асинхронності (async/await) та паралельних обчислень.
+
+		приклад:	
+
+	Task task = Task.Run(() =>
+	{
+		Console.WriteLine("Виконується у фоновому потоці");
+	});
 
 
+	task.Wait(); - чекає поки таск закінчить таск, щоб мейн чекав і не виконувався далі
+
+	Task[] tasks = new ....
+
+	Task.WaitAll(tasks); - чекає поки виконуються всі таски
+	Task.WaitAny(tasks); - чекає виконання хоч одного таска
+
+task.ContiueWith(display).ContiueWith(Display2);
+task.Start();
+
+виконується як ланцюжок, task --> display --> Display2 
+
+Потік Thread  - не вертає нічого, void
+
+Task - може давати ретурн
+
+	Task<long> factorialTask = Task.Run(() =>
+	{
+		int n = 10;
+		long result = 1;
+		for (int i = 1; i <= n; i++)
+			result *= i;
+		return result;
+	});
+
+	long factorial = factorialTask.Result; // або await у async-методі
+	Console.WriteLine($"Факторіал: {factorial}");	
+
+або
+	таск з одним аргументом або багатьма
+	
+	Task<int> task1 = new Task<int>(()=> Factorial(5));
+	task1.Start();
+	Task<long> factorialTask = Task.Run(() => CalculateFactorial(n));
+
+	long result = factorialTask.Result;
+	Console.WriteLine($"Факторіал числа {n}: {result}");
+		
+	Console.WriteLine(task1.Resault); - аналогічно з Waite, поки таск не підпрацює, немає чого виводити
+
+
+
+Таски бувають вкладені, і по дефолту вони незалежні, але можна привязати їх
+
+            var outer = Task.Factory.StartNew(() =>      // outer task
+            {
+                Console.WriteLine("Outer task starting...");
+
+                var inner = Task.Factory.StartNew(() =>  // inner task
+                {
+                    Console.WriteLine("Inner task starting...");
+                    Thread.Sleep(2000);
+                    Console.WriteLine("Inner task finished.");
+
+                }, TaskCreationOptions.AttachedToParent); - якщо це додати то таски привязуються до кучі, і виконуються разом
+
+
+
+4 масив поза межами 
+
+масив таскив
+
+фор що біжить по таскам
+
+
+
+
+
+
+
+datatime
+console.writeline
+
+5* 
+
+1 таска генерує массив і повертає його
+
+друга таска  - арр.Distinct(); і вертаємо назад
+
+3 таска сортуємо масив ліст сорт
 
