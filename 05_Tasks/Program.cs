@@ -92,6 +92,102 @@ namespace _05_Tasks
             Console.WriteLine("Exercise 4 ");
 
 
+            var rnd = new Random();
+            int length = 20;
+            int[] numbers = new int[length];
+
+            for (int i = 0; i < length; i++)
+                numbers[i] = rnd.Next(1, 101); 
+
+            Console.WriteLine("Масив:");
+            Console.WriteLine(string.Join(", ", numbers));
+
+            int min = 0, max = 0, sum = 0;
+            double avg = 0;
+
+
+            Task[] tasks = new Task[4];
+
+            tasks[0] = Task.Run(() =>
+            {
+                min = numbers.Min();
+            });
+
+            tasks[1] = Task.Run(() =>
+            {
+                max = numbers.Max();
+            });
+
+            tasks[2] = Task.Run(() =>
+            {
+                sum = numbers.Sum();
+            });
+
+            tasks[3] = Task.Run(() =>
+            {
+                avg = numbers.Average();
+            });
+
+
+            Task.WaitAll(tasks);
+
+            Console.WriteLine("\nРезультати обчислень:");
+            Console.WriteLine($"Мінімум: {min}");
+            Console.WriteLine($"Максимум: {max}");
+            Console.WriteLine($"Сума: {sum}");
+            Console.WriteLine($"Середнє арифметичне: {avg:F2}");
+
+
+            Console.ReadLine();
+            Console.WriteLine("Exercise 5 ");
+
+
+            Task<int[]> generateTask = Task.Run(() =>
+            {
+                var rnd = new Random();
+                int length = 20;
+                int[] arr = new int[length];
+                for (int i = 0; i < length; i++)
+                    arr[i] = rnd.Next(0, 15);
+                Console.WriteLine("Згенерований масив:");
+                Console.WriteLine(string.Join(", ", arr));
+                return arr;
+            });
+
+            Task<int[]> removeDuplicatesTask = generateTask.ContinueWith(prev =>
+            {
+                int[] distinct = prev.Result.Distinct().ToArray();
+                Console.WriteLine("\nПісля видалення дублікатів:");
+                Console.WriteLine(string.Join(", ", distinct));
+                return distinct;
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            Task<int[]> sortTask = removeDuplicatesTask.ContinueWith(prev =>
+            {
+                int[] arr = prev.Result;
+                Array.Sort(arr);
+                Console.WriteLine("\nВідсортований масив:");
+                Console.WriteLine(string.Join(", ", arr));
+                return arr;
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            Task searchTask = sortTask.ContinueWith(prev =>
+            {
+                int[] sorted = prev.Result;
+                Console.WriteLine("\nВведіть число для бінарного пошуку:");
+                int value = int.Parse(Console.ReadLine()); 
+                int index = Array.BinarySearch(sorted, value);
+                if (index >= 0)
+                    Console.WriteLine($"Значення {value} знайдено за індексом {index}.");
+                else
+                    Console.WriteLine($"Значення {value} не знайдено.");
+            }, TaskContinuationOptions.OnlyOnRanToCompletion);
+
+            
+            searchTask.Wait();
+
+            Console.ReadKey();
+
 
 
         }
