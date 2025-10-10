@@ -5642,61 +5642,53 @@ Task - може давати ретурн
 
 Async Await у C# — це механізм асинхронного програмування, який дозволяє виконувати довгі або повільні операції (наприклад, завантаження файлу, роботу з базою, мережеві запити) без блокування основного потоку.
 
+Асинхронно - це послідовно, але не фрізить 
 Просто кажучи:
 
-async — помічає метод як асинхронний; він може всередині використовувати await. Він ділиться на частини. Якась частина запускається одразу, а як тільки авейк спрацює,  інша має доробитися 
+async — помічає метод як асинхронний; він може всередині використовувати await. Він ділиться на частини. Якась частина запускається одразу, а як тільки авейк спрацює,  інша має доробитися.
+В середині має бути
 
 await — “чекає” завершення асинхронної операції, але не блокує потік.
 
 Поки виконується задача, інші частини програми можуть продовжувати працювати.
 
-Приклад:
-
-async Task DownloadAsync()
-	{
-		var data = await httpClient.GetStringAsync("https://example.com");
-		Console.WriteLine(data);
-	}
-
-Потік не зависає, поки дані вантажаться — він вільний робити щось інше.
-
-
-    static async Task Main()
-    {
-        Console.WriteLine("Початок роботи");
-
-        await DoWorkAsync(); // асинхронний виклик
-
-        Console.WriteLine("Робота завершена");
-    }
-
-    static async Task DoWorkAsync()
-    {
-        Console.WriteLine("Починаю довгу операцію...");
-        await Task.Delay(2000); // чекаємо 2 секунди, не блокуючи головний потік
-        Console.WriteLine("Операція завершена!");
-    }
-	
-	
 Працює не псевдопаралельно - а асинхронно - йде послідовно але не фрізиться
 
 Асинхронні методи - вони завжди повертають таск
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+ Приклад:
+
+        public MainWindow()
         {
-            
-            list.Items.Add(await GenerateNumberAsync()); - 
-                     
+            InitializeComponent();
         }
 
-        Task<int> GenerateNumberAsync()
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-             return Task.Run(()=>
-             {
-                 Thread.Sleep(random.Next(5000));
-                 return random.Next(1000);
-             });
-           
+            Console.OutputEncoding = Encoding.UTF8;
+            await CopyAsync(from.Text, to.Text);
+            MessageBox.Show("Копіювання завершено!");
         }
+
+        private Task CopyAsync(string from, string to)
+        {
+
+            return Task.Run(() => File.Copy(from, to, overwrite: true));
+        }
+    }
+
+CopyAsync, як і будь який асинк метод вертає Таски (так має бути щоб await (в Button_Click)  знав коли CopyAsync закінчить роботу 
+
+Це потрібно тому, що якщо ми будемо використовувати task.Wait(); то вікно буде фрізитись.
+
+А коли таск через await вікно не фрізиться.
+
+
+Binding  - привязка щоб вікно бачило код, на приклад щоб полоса загрузки  знає з коду 
+
+========================================================
+07_Task_Parallel
+
+Не слова про Task Parallel на парах не було ¯\_(ツ)_/¯
 
 

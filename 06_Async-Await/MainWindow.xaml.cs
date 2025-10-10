@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,11 +23,17 @@ namespace _06_Async_Await
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string sourcePath = from.Text;
-            string destPath = to.Text;
-            File.Copy(sourcePath, destPath, overwrite: true);
+            Console.OutputEncoding = Encoding.UTF8;
+            await CopyAsync(from.Text, to.Text);
+            MessageBox.Show("Копіювання завершено!");
+        }
+
+        private Task CopyAsync(string from, string to)
+        {
+
+            return Task.Run(() => File.Copy(from, to, overwrite: true));
         }
     }
 }
