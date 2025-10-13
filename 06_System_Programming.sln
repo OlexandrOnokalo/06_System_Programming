@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05_Tasks", "05_Tasks\05_Tas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06_Async-Await", "06_Async-Await\06_Async-Await.csproj", "{73967693-3E92-496B-BD75-1383DBEE5D54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07_CopyFileManager", "C:\Users\Pulse\source\repos\07_CopyFileManager\07_CopyFileManager.csproj", "{FBD2C63C-A78C-1278-9A5F-6BB740EFF8F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07_CopyFileManager", "07_CopyFileManager\07_CopyFileManager.csproj", "{DC4987F2-0E87-4291-9D2C-1C8888B0EE3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{73967693-3E92-496B-BD75-1383DBEE5D54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73967693-3E92-496B-BD75-1383DBEE5D54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73967693-3E92-496B-BD75-1383DBEE5D54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBD2C63C-A78C-1278-9A5F-6BB740EFF8F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBD2C63C-A78C-1278-9A5F-6BB740EFF8F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBD2C63C-A78C-1278-9A5F-6BB740EFF8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBD2C63C-A78C-1278-9A5F-6BB740EFF8F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4987F2-0E87-4291-9D2C-1C8888B0EE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4987F2-0E87-4291-9D2C-1C8888B0EE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4987F2-0E87-4291-9D2C-1C8888B0EE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4987F2-0E87-4291-9D2C-1C8888B0EE3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
