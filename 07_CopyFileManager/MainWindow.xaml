@@ -10,14 +10,14 @@
         <Style TargetType="{x:Type Button }">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="Padding" Value="10"></Setter>
-            <Setter Property="Background" Value="LightBlue"></Setter>            
+            <Setter Property="Background" Value="LightBlue"></Setter>
         </Style>
         <Style TargetType="{x:Type TextBox }">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
         </Style>
     </Window.Resources>
-    <DockPanel LastChildFill="False">
+    <DockPanel LastChildFill="True">
         <Grid Margin="5" DockPanel.Dock="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -43,9 +43,36 @@
 
 
         </Grid>
-        <ProgressBar Name="progress" Value="{Binding Progress}" Height="15" 
+        <ProgressBar Name="progress" Height="15" 
                      DockPanel.Dock="Bottom" IsIndeterminate="{Binding IsWaiting}"></ProgressBar>
+        <ListBox ItemsSource="{Binding Processes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 DockPanel.Dock="Top" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <ListBoxItem>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="{Binding Filename}"
+                                       Margin="5" TextTrimming="WordEllipsis"></TextBlock>
+                            <TextBlock Grid.Column="1"  Margin="5" > 
+                               <Run Text="{Binding Percentage}"></Run>  %
+                            </TextBlock>
+
+
+                            <ProgressBar Grid.Column="2" Value="{Binding Percentage}"></ProgressBar>
+                        </Grid>
+
+
+                    </ListBoxItem>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+ 
+        </ListBox>
 
     </DockPanel>
-   
+
 </Window>
