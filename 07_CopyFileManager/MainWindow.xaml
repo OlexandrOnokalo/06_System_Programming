@@ -4,75 +4,60 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_07_CopyFileManager"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" >
-    <Window.Resources>
-        <Style TargetType="{x:Type Button }">
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="Padding" Value="10"></Setter>
-            <Setter Property="Background" Value="LightBlue"></Setter>
-        </Style>
-        <Style TargetType="{x:Type TextBox }">
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-        </Style>
-    </Window.Resources>
-    <DockPanel LastChildFill="True">
-        <Grid Margin="5" DockPanel.Dock="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Background="LightBlue">
+        <Border MinHeight="300" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="15" MaxWidth="500" CornerRadius="15">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray"></DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label FontSize="30" FontWeight="Bold" >From:</Label>
+                    <TextBox Name="sourceText" Text="{Binding Source}" HorizontalAlignment="Center" materialDesign:HintAssist.Hint="Enter file to copy" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" MaxWidth="220" FontSize="10" IsEnabled="False" ></TextBox>
+                    <Button HorizontalAlignment="Right" Grid.Column="2" Margin="15" Click="sourceBtn">Browse</Button>
+                    <Label FontSize="30" FontWeight="Bold" Grid.Row="1">To:</Label>
+                    <TextBox Name="destText"  Text="{Binding Destination}" HorizontalAlignment="Center" materialDesign:HintAssist.Hint="Enter path to copy" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Column="1" Grid.Row="1" MaxWidth="220" FontSize="10" IsEnabled="False" ></TextBox>
+                    <Button HorizontalAlignment="Right" Grid.Column="2" Grid.Row="1" Margin="15" Click="destBtn">Browse</Button>
+                </Grid>
+                <Button Margin="15" FontSize="18" Click="copyBtn">Copy</Button>
+                <ProgressBar Height="10" IsIndeterminate="{Binding IsWaiting}" Value="{Binding Progress}"></ProgressBar>
+                <ListBox ItemsSource="{Binding CopyProgress}" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <ListBoxItem>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" MaxWidth="100"/>
+                                        <ColumnDefinition Width="auto" MaxWidth="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-            <Label FontSize="15" FontWeight="Bold">From :</Label>
-            <TextBox x:Name="sourceTb" Grid.Column="1" Text="{Binding Source}"  ></TextBox>
-            <Label FontSize="15" FontWeight="Bold" Grid.Row="1">To :</Label>
-            <TextBox x:Name="DestTb" Grid.Row="1" Grid.Column="1"
-                     Text="{Binding Destination}"></TextBox>
-            <Button  Grid.Column="2" Click="SourceBtn">Browse</Button>
-            <Button  Grid.Column="2" Grid.Row="1" Click="DestBtn">Browse</Button>
-            <Button Grid.Row="2" Grid.ColumnSpan="3" 
-              FontSize="25" FontWeight="Bold" Click="CopyBtn">Copy</Button>
+                                    <TextBlock Grid.Column="0" Text="{Binding FileName}" TextTrimming="CharacterEllipsis" Margin="5"></TextBlock>
+                                    <TextBlock Grid.Column="1" Margin="5">
+                                        <Run Text="{Binding Percantage}"></Run>%
+                                    </TextBlock>
+                                    <ProgressBar Grid.Column="2" Value="{Binding Percantage}" Height="10"></ProgressBar>
 
-
-        </Grid>
-        <ProgressBar Name="progress" Height="15" 
-                     DockPanel.Dock="Bottom" IsIndeterminate="{Binding IsWaiting}"></ProgressBar>
-        <ListBox ItemsSource="{Binding Processes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 DockPanel.Dock="Top" HorizontalContentAlignment="Stretch">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <ListBoxItem>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto" MaxWidth="100"></ColumnDefinition>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="{Binding Filename}"
-                                       Margin="5" TextTrimming="WordEllipsis"></TextBlock>
-                            <TextBlock Grid.Column="1"  Margin="5" > 
-                               <Run Text="{Binding Percentage}"></Run>  %
-                            </TextBlock>
+                                </Grid>
+                            </ListBoxItem>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
 
-                            <ProgressBar Grid.Column="2" Value="{Binding Percentage}"></ProgressBar>
-                        </Grid>
-
-
-                    </ListBoxItem>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
- 
-        </ListBox>
-
-    </DockPanel>
-
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>

@@ -1,11 +1,19 @@
-﻿using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using PropertyChanged;
+﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using PropertyChanged;
 
 namespace _07_CopyFileManager
 {
@@ -18,57 +26,54 @@ namespace _07_CopyFileManager
         public MainWindow()
         {
             InitializeComponent();
-            model.Source = sourceTb.Text = @"D:\My Documents\Temp\Temp1.zip";
-            model.Destination = DestTb.Text = @"D:\My Documents\Temp2";
+            model.Source = sourceText.Text = @"D:\My Documents\Temp\Temp1.zip";
+            model.Destination = destText.Text = @"D:\My Documents\Temp2";
             model.Progress = 0;
             this.DataContext = model;
-
         }
 
-        private void SourceBtn(object sender, RoutedEventArgs e)
+        private void sourceBtn(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            if (fileDialog.ShowDialog() == true)
+            CommonOpenFileDialog fileDialog = new CommonOpenFileDialog();
+            fileDialog.IsFolderPicker = false;
+
+            if (fileDialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-               
-                model.Source = sourceTb.Text = fileDialog.FileName;
+                model.Source = sourceText.Text = fileDialog.FileName;
             }
         }
-
-        private void DestBtn(object sender, RoutedEventArgs e)
+        private void destBtn(object sender, RoutedEventArgs e)
         {
-            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            CommonOpenFileDialog folderDiag = new CommonOpenFileDialog();
+            folderDiag.IsFolderPicker = true;
+
+            if (folderDiag.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                model.Destination = DestTb.Text = dialog.FileName;
+                model.Destination = destText.Text = folderDiag.FileName;
             }
         }
-
-        private async void CopyBtn(object sender, RoutedEventArgs e)
+        private async void copyBtn(object sender, RoutedEventArgs e)
         {
-            
-            string filename = Path.GetFileName(model.Source);
-            string destFilename = Path.Combine(model.Destination, filename);
-            
-            CopyProcessecInfo info = new CopyProcessecInfo()
-            {
-                Filename = filename,
-                Percentage = 0
-            };
+            string fname = System.IO.Path.GetFileName(model.Source);
+            string destFilename = System.IO.Path.Combine(model.Destination, fname);
 
-            model.AddProcess(info);
+            CopyProgressInfo info = new CopyProgressInfo();
+            {
+                info.FileName = fname;
+                info.Percantage = 0;
+            }
+
+            model.AddInfo(info);
+
             await CopyFileAsync(model.Source, destFilename, info);
-            MessageBox.Show("Completed!!!");
-
+            MessageBox.Show("File Copied!");
+            //model.Progress = 0;
         }
-
-        private Task CopyFileAsync(string src, string dest, CopyProcessecInfo info)
+        private Task CopyFileAsync(string src, string dest, CopyProgressInfo info)
         {
             return Task.Run(() =>
             {
-                
+
                 using FileStream srcStream = new FileStream(src, FileMode.Open, FileAccess.Read);
                 using FileStream desStream = new FileStream(dest, FileMode.Create, FileAccess.Write);
                 byte[] buffer = new byte[1024 * 8];
@@ -79,40 +84,37 @@ namespace _07_CopyFileManager
                     desStream.Write(buffer, 0, bytes);
 
                     float percentage = desStream.Length / (srcStream.Length / 100);
-                       
-                    model.Progress = percentage;
-                    info.Percentage = percentage;
-
+                    //model.Progress = percentage;
+                    info.Percantage = percentage;
 
                 } while (bytes > 0);
-
-
             });
-
         }
+
     }
     [AddINotifyPropertyChangedInterface]
     class ViewModel
     {
-        private ObservableCollection<CopyProcessecInfo> processes;
+        ObservableCollection<CopyProgressInfo> copyprogress;
         public string Source { get; set; }
         public string Destination { get; set; }
         public float Progress { get; set; }
         public bool IsWaiting => Progress == 0;
-        public IEnumerable<CopyProcessecInfo> Processes => processes;//get - readonly
+
         public ViewModel()
         {
-            processes = [];
+            copyprogress = new ObservableCollection<CopyProgressInfo>();
         }
-        public void AddProcess(CopyProcessecInfo info)
+        public IEnumerable<CopyProgressInfo> CopyProgress => copyprogress;
+        public void AddInfo(CopyProgressInfo info)
         {
-            processes.Add(info);
+            copyprogress.Add(info);
         }
     }
     [AddINotifyPropertyChangedInterface]
-    class CopyProcessecInfo
+    class CopyProgressInfo
     {
-        public string Filename { get; set; }
-        public float Percentage { get; set; }
+        public string FileName { get; set; }
+        public float Percantage { get; set; }
     }
 }
